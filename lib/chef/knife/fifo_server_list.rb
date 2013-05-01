@@ -5,7 +5,7 @@ class Chef
   class Knife
     class FifoServerList < Knife
 
-      include Knife::ProjectFifoBase
+      include Knife::FifoBase
 
       banner "knife fifo server list (options)"
 
