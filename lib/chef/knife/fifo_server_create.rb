@@ -78,7 +78,7 @@ class Chef
       def bootstrap_for_node(server, ssh_host)
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = [ssh_host]
-        bootstrap.config[:ssh_user] = config[:ssh_user] || root
+        bootstrap.config[:ssh_user] = config[:ssh_user] || "root"
         bootstrap.config[:ssh_port] = config[:ssh_port] || 22
         bootstrap.config[:ssh_gateway] = config[:ssh_gateway]
         bootstrap.config[:identity_file] = config[:identity_file]
@@ -140,8 +140,10 @@ class Chef
         while true do
           server = connection.vms[id]
           break if server['state'] == "running"
-          sleep 5
+          print('.')
+          sleep 10
         end
+        puts("done")
         
         ip = begin
                server['config']['networks'].first['ip']
