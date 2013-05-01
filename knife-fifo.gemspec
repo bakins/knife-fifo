@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
-  s.name        = "knife-project-fifo"
+  s.name        = "knife-fifo"
   s.version     = "0.1.0"
   s.authors     = ["Brian Akins"]
   s.email       = ["brian@akins.org"]
-  s.homepage = "https://github.com/bakins/knife-project-fifo"
+  s.homepage = "https://github.com/bakins/knife-fifo"
   s.summary = "Project Fifo Support for Chef's Knife Command"
   s.description = s.summary
   s.license       = "Apache 2.0"

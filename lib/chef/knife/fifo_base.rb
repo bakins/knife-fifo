@@ -2,7 +2,7 @@ require 'chef/knife'
 
 class Chef
   class Knife
-    module ProjectFifoBase
+    module FifoBase
       def self.included(includer)
         includer.class_eval do
 
@@ -10,29 +10,29 @@ class Chef
             require 'project-fifo'
           end
 
-          option :project_fifo_username,
-          :long => "--project-fifo-username KEY",
+          option :fifo_username,
+          :long => "--fifo-username KEY",
           :description => "Your Project Fifo username",
-          :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_username] = key }
+          :proc => Proc.new { |key| Chef::Config[:knife][:fifo_username] = key }
           
-          option :project_fifo_password,
-          :long => "--project-fifo-password SECRET",
+          option :fifo_password,
+          :long => "--fifo-password SECRET",
           :description => "Your Project Fifo Password",
-          :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_password] = key }
+          :proc => Proc.new { |key| Chef::Config[:knife][:fifo_password] = key }
           
-          option :project_fifo_endpoint,
-          :long => "--project-fifo-endpoint REGION",
+          option :fifo_endpoint,
+          :long => "--fifo-endpoint REGION",
           :description => "Your Project Fifo endpoint",
-          :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_endpoint] = key }
+          :proc => Proc.new { |key| Chef::Config[:knife][:fifo_endpoint] = key }
         end
       end
       
       def connection
         @connection ||= begin
                           c = ProjectFifo.new(
-                                              Chef::Config[:knife][:project_fifo_endpoint], 
-                                              Chef::Config[:knife][:project_fifo_username],
-                                              Chef::Config[:knife][:project_fifo_password]
+                                              Chef::Config[:knife][:fifo_endpoint], 
+                                              Chef::Config[:knife][:fifo_username],
+                                              Chef::Config[:knife][:fifo_password]
                                               )
                           c.connect
                           c

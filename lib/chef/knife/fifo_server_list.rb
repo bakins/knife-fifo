@@ -3,11 +3,11 @@ require 'pp'
 
 class Chef
   class Knife
-    class ProjectFifoServerList < Knife
+    class FifoServerList < Knife
 
       include Knife::ProjectFifoBase
 
-      banner "knife project-fifo server list (options)"
+      banner "knife fifo server list (options)"
 
       def run
         $stdout.sync = true
