@@ -10,23 +10,23 @@ class Chef
             require 'project-fifo-ruby'
           end
 
-          option :project_fifo_username
-            :long => "--project-fifo-username KEY",
-            :description => "Your Project Fifo username",
-            :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_username] = key }
-
+          option :project_fifo_username,
+          :long => "--project-fifo-username KEY",
+          :description => "Your Project Fifo username",
+          :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_username] = key }
+          
           option :project_fifo_password,
-            :long => "--project-fifo-password SECRET",
-            :description => "Your Project Fifo Password",
-            :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_password] = key }
-
+          :long => "--project-fifo-password SECRET",
+          :description => "Your Project Fifo Password",
+          :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_password] = key }
+          
           option :project_fifo_endpoint,
-            :long => "--project-fifo-endpoint REGION",
-            :description => "Your Project Fifo endpoint",
-            :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_endpoint] = key }
+          :long => "--project-fifo-endpoint REGION",
+          :description => "Your Project Fifo endpoint",
+          :proc => Proc.new { |key| Chef::Config[:knife][:project_fifo_endpoint] = key }
         end
       end
-
+      
       def connection
         @connection ||= begin
                           ProjectFifo.new(
