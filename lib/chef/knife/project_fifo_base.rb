@@ -7,7 +7,7 @@ class Chef
         includer.class_eval do
 
           deps do
-            require 'project-fifo-ruby'
+            require 'project-fifo'
           end
 
           option :project_fifo_username,
