@@ -29,11 +29,13 @@ class Chef
       
       def connection
         @connection ||= begin
-                          ProjectFifo.new(
-                                          Chef::Config[:knife][:project_fifo_endpoint], 
-                                          Chef::Config[:knife][:project_fifo_username],
-                                          Chef::Config[:knife][:project_fifo_password]
-                                          )
+                          c = ProjectFifo.new(
+                                              Chef::Config[:knife][:project_fifo_endpoint], 
+                                              Chef::Config[:knife][:project_fifo_username],
+                                              Chef::Config[:knife][:project_fifo_password]
+                                              )
+                          c.connect
+                          c
                         end
       end
 

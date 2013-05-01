@@ -13,31 +13,39 @@ class Chef
         $stdout.sync = true
         
         server_list = [
-          ui.color('Instance ID', :bold),
+                       ui.color('ID', :bold),
+                       ui.color("Alias", :bold),
+                       ui.color('First IP', :bold),
+                       ui.color('Dataset', :bold),
+                       ui.color('Package', :bold),
+                       ui.color('State', :bold)
+                      ].flatten.compact
         
-          if config[:name]
-            ui.color("Name", :bold)
-          end,
-
-          ui.color('Public IP', :bold),
-          ui.color('Private IP', :bold),
-          ui.color('Flavor', :bold),
-          ui.color('Image', :bold),
-          ui.color('SSH Key', :bold),
-          ui.color('Security Groups', :bold),
-          
-          if config[:tags]
-            config[:tags].split(",").collect do |tag_name|
-              ui.color("Tag:#{tag_name}", :bold)
-            end
-          end,
-          
-          ui.color('State', :bold)
-        ].flatten.compact
+        output_column_count = server_list.length
         
         connection.vms.list.each do |server|
-          pp server
+          server = connection.vms[server]
+          server_list << server['uuid']
+          server_list << server['config']['alias'] or 'none'
+          server_list << begin
+                           server['config']['networks'].first['ip']
+                         rescue
+                           'none'
+                         end
+          server_list << begin
+                           connection.datasets[server['dataset']]['name']
+                         rescue
+                           'unknown'
+                         end
+          server_list << begin
+                           connection.packages[server['package']]['name']
+                         rescue
+                           'unknown'
+                         end
+          server_list << server['state'] || 'unknown'
         end
+        
+        puts ui.list(server_list, :uneven_columns_across, output_column_count)
       end
       
     end
