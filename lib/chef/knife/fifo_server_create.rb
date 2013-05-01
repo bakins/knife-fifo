@@ -85,9 +85,14 @@ class Chef
         bootstrap.config[:chef_node_name] = locate_config_value(:chef_node_name) || server
         bootstrap.config[:distro] = locate_config_value(:distro) || "chef-full"
         bootstrap.config[:use_sudo] = true unless config[:ssh_user] == 'root'
+        bootstrap.config[:run_list] = config[:run_list]
+        bootstrap.config[:bootstrap_version] = locate_config_value(:bootstrap_version)
+        bootstrap.config[:distro] = locate_config_value(:distro) || "chef-full"
+        bootstrap.config[:template_file] = locate_config_value(:template_file)
+        bootstrap.config[:environment] = locate_config_value(:environment)
         # may be needed for vpc_mode
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
-        bootstrap_common_params(bootstrap)
+        bootstrap
       end
       
       def tcp_test_ssh(hostname, ssh_port=22)
@@ -159,7 +164,7 @@ class Chef
           puts("done")
         }
         
-        bootstrap_for_node(node_alias, ip)
+        bootstrap_for_node(node_alias, ip).run
       end
     end
   end
