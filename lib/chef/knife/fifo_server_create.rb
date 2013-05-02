@@ -114,27 +114,37 @@ class Chef
         tcp_socket && tcp_socket.close
       end
        
+      def validate(key)
+        value = locate_config_value( ('fifo_' + key.to_s).to_sym ) or raise "#{key} is required"
+        raise "unable to find a #{key} with id #{value}" unless connection.send((key.to_s + 's').to_sym)[value]
+        value
+      end
+
       def run
         node_alias = locate_config_value(:alias) || locate_config_value(:chef_node_name)
         
         raise "must either provide alias or chef_node_name" unless node_alias
-        
         #should we validate the package, dataset, and network before hand?
+        dataset = validate(:dataset)
+        package = validate(:package)
+        iprange = validate(:iprange)
+        
+        #I'd like to send the bootstrap as a user-script, but I think it's too large
         data = {
-          dataset: locate_config_value(:fifo_dataset), 
-          package: locate_config_value(:fifo_package), 
+          dataset: dataset, 
+          package: package, 
           config: { 
             alias: node_alias,
             ssh_keys: connection.ssh_keys,
             networks: { 
-              net0: locate_config_value(:fifo_iprange)
+              net0: iprange
             },
             metadata: {
               hostname: node_alias
             }
           }
         }
-        
+
         server = connection.vms.create(data)
 
         id = server['uuid']
@@ -159,10 +169,15 @@ class Chef
         raise "no ipaddress??" unless ip
         
         print "\n#{ui.color("Waiting for sshd", :magenta)}"
-        print(".") until tcp_test_ssh(ip) {
-          sleep 10
-          puts("done")
-        }
+
+        #ubuntu images come up then reboot?? so make sure we can connect 3 times?
+        3.times do
+          print(".") until tcp_test_ssh(ip) {
+            sleep 10
+          }
+          sleep 5
+        end
+        puts("done")
         
         bootstrap_for_node(node_alias, ip).run
       end
