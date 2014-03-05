@@ -1,4 +1,4 @@
-require 'chef/knife/project_fifo_base'
+require 'chef/knife/fifo_base'
 require 'pp'
 
 class Chef
